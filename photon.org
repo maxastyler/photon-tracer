@@ -1,0 +1,7 @@
+* Assumptions made
+- Particles are spherical, with a density of n/metre^3 (p) and volume V
+At each point there is a probability pV of scattering
+Could be some problems with correlations when integrating - eg. integrating with too small time steps
+since I don't consider correlations in position of particles
+
+the theta probability distribution is 2(1+cos^2(theta))/(3*pi)

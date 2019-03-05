@@ -1,0 +1,9 @@
+[package]
+name = "photon_tracer"
+version = "0.1.0"
+authors = ["Max Tyler <maxastyler@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+rayon = "1.0"
+rand = "0.6"
