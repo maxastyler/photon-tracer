@@ -52,7 +52,4 @@ fn main() {
     for thread in thread_handles {
         thread.join().unwrap();
     }
-    for (i, _) in rx.iter().enumerate() {
-        println!("{}", i);
-    }
 }
