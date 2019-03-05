@@ -5,8 +5,10 @@ use rayon::prelude::*;
 
 pub mod photon;
 pub mod world;
+pub mod vec3;
 
-use crate::photon::{Photon, Vec3};
+use crate::photon::Photon;
+use crate::vec3::Vec3;
 use crate::world::random_direction;
 
 fn move_photon(p: &mut Photon, dt: f32) {
