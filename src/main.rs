@@ -1,27 +1,58 @@
-extern crate rayon;
 extern crate rand;
+extern crate rayon;
 
 use rayon::prelude::*;
+use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::mpsc;
+use std::sync::Arc;
+use std::thread;
 
 pub mod photon;
-pub mod world;
 pub mod vec3;
+pub mod world;
 
 use crate::photon::Photon;
 use crate::vec3::Vec3;
-use crate::world::random_direction;
-
-fn move_photon(p: &mut Photon, dt: f32) {
-    if (p.position.x > 0.0)
-        && (p.position.x < 1.0)
-        && (p.position.y > 0.0)
-        && (p.position.y < 1.0)
-        && (p.position.z > 0.0)
-        && (p.position.z < 1.0)
-    {
-    }
-}
+use crate::world::{random_direction, PhotonRun};
 
 fn main() {
-    println!("{:?}", random_direction(&Vec3::zero()));
+    let total_photons = 100_000;
+    let photon_count = Arc::new(AtomicUsize::new(0));
+    let mut thread_handles = vec![];
+    let (tx, rx) = mpsc::channel();
+    for _ in 0..3 {
+        let path_clone = photon_count.clone();
+        let tx_clone = tx.clone();
+        thread_handles.push(thread::spawn(move || {
+            let bounds_min = Vec3::new(0.0, 0.0, 0.0);
+            let bounds_max = Vec3::new(1.0, 1.0, 1.0);
+            loop {
+                if path_clone.load(Ordering::SeqCst) < total_photons {
+                    path_clone.fetch_add(1, Ordering::SeqCst);
+                    let mut r = PhotonRun::new(
+                        Photon::new(
+                            Vec3::new(0.5, 0.5, 0.0),
+                            Vec3::new(0.0, 0.0, 1.0) * 3.0 * 10f32.powi(8),
+                        ),
+                        &|_| 1.0,
+                        (&bounds_min, &bounds_max),
+                        0.01,
+                    );
+                    while r.in_box() {
+                        r.step(0.000000000001);
+                    }
+                    tx_clone.send(r.scattering_positions).unwrap();
+                } else {
+                    break;
+                }
+            }
+        }));
+    }
+    drop(tx);
+    for thread in thread_handles {
+        thread.join().unwrap();
+    }
+    for (i, _) in rx.iter().enumerate() {
+        println!("{}", i);
+    }
 }
