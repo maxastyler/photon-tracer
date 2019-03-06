@@ -25,7 +25,7 @@ const PHOTON_DIRECTION: (f32, f32, f32) = (0.0, 0.0, 1.0);
 const PHOTON_NUM_DEFAULT: usize = 1000;
 const CORE_NUM_DEFAULT: usize = 1;
 
-const PARTICLE_RADIUS: f32 = 0.000_000_001;
+const PARTICLE_RADIUS: f32 = 0.00001;
 
 const STEP_SIZE: f32 = 0.000_01;
 
