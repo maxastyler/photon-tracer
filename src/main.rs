@@ -20,7 +20,7 @@ fn main() {
     let photon_count = Arc::new(AtomicUsize::new(0));
     let mut thread_handles = vec![];
     let (tx, rx) = mpsc::channel();
-    for _ in 0..3 {
+    for _ in 0..4 {
         let path_clone = photon_count.clone();
         let tx_clone = tx.clone();
         thread_handles.push(thread::spawn(move || {
