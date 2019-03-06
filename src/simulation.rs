@@ -26,9 +26,9 @@ pub fn run_simulation(
                 photon_count_clone.fetch_add(1, Ordering::SeqCst);
                 let mut r = PhotonRun::new(
                     photon_prototype_clone,
-                    &|_| 10.0,
+                    &|_| 100_000.0,
                     (bounds_min, bounds_max),
-                    0.01,
+                    0.001,
                 );
                 while r.in_box() {
                     r.step(0.000_1);
@@ -53,9 +53,9 @@ pub fn run_simulation(
             photon_count_clone.fetch_add(1, Ordering::SeqCst);
             let mut r = PhotonRun::new(
                 photon_prototype_clone,
-                &|_| 10.0,
+                &|_| 100_000.0,
                 (bounds_min, bounds_max),
-                0.01,
+                0.00001,
             );
             while r.in_box() {
                 r.step(0.000_1);
@@ -71,5 +71,5 @@ pub fn run_simulation(
     for handle in thread_handles {
         handle.join().unwrap();
     }
-    rx.iter().collect()
+    rx.try_iter().collect()
 }

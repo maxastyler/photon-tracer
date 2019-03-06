@@ -1,5 +1,5 @@
-extern crate rand;
 extern crate indicatif;
+extern crate rand;
 
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::mpsc;
@@ -28,13 +28,11 @@ const BOUNDS_MAX: Vec3 = Vec3 {
 };
 
 fn main() {
-    for i in run_simulation(
+    run_simulation(
         100_000,
         4,
         Photon::new(Vec3::new(0.5, 0.5, 0.0), Vec3::new(0.0, 0.0, 1.0)),
         &BOUNDS_MIN,
         &BOUNDS_MAX,
-    ) {
-        println!("{:?}", i);
-    }
+    );
 }
