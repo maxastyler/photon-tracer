@@ -11,12 +11,12 @@ pub fn density(v: Vec3) -> f32 {
     0.0
 }
 
-pub fn run_simulation(
+pub fn run_simulation<'a>(
     n_photons: usize,
     n_threads: usize,
     photon_prototype: Photon,
-    bounds_min: &'static Vec3,
-    bounds_max: &'static Vec3,
+    bounds_min: Vec3,
+    bounds_max: Vec3,
     particle_cross_section: f32,
     dx: f32,
 ) -> Vec<Vec<Vec3>> {
@@ -33,7 +33,7 @@ pub fn run_simulation(
                 let mut r = PhotonRun::new(
                     photon_prototype_clone,
                     &density,
-                    (bounds_min, bounds_max),
+                    (&bounds_min, &bounds_max),
                     particle_cross_section,
                 );
                 while r.in_box() {
@@ -64,7 +64,7 @@ pub fn run_simulation(
             let mut r = PhotonRun::new(
                 photon_prototype_clone,
                 &density,
-                (bounds_min, bounds_max),
+                (&bounds_min, &bounds_max),
                 particle_cross_section,
             );
             while r.in_box() {
