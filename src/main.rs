@@ -27,11 +27,13 @@ const BOUNDS_MAX: Vec3 = Vec3 {
 
 fn main() -> std::io::Result<()> {
     let run_data = run_simulation(
-        100_000,
+        100,
         24,
         Photon::new(Vec3::new(0.5, 0.5, 0.0), Vec3::new(0.0, 0.0, 1.0)),
         &BOUNDS_MIN,
         &BOUNDS_MAX,
+        0.000_000_1,
+        0.000_001,
     );
     let mut file = File::create("run_data.txt")?;
     file.write_all(build_vec_string(run_data).as_bytes())?;
