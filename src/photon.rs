@@ -13,8 +13,8 @@ impl Photon {
         }
     }
 
-    pub fn step(&mut self, dt: f32) {
-        self.position += &self.direction * dt;
+    pub fn step(&mut self, dx: f32) {
+        self.position += &self.direction * dx;
     }
 }
 

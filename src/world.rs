@@ -9,7 +9,7 @@ pub struct PhotonRun<'a> {
     pub scattering_positions: Vec<Vec3>,
     pub density: &'a Fn(Vec3) -> f32,
     pub bounds: (&'a Vec3, &'a Vec3),
-    pub particle_volume: f32,
+    pub particle_cross_section: f32,
 }
 
 impl<'a> PhotonRun<'a> {
@@ -17,14 +17,14 @@ impl<'a> PhotonRun<'a> {
         photon: Photon,
         density: &'a Fn(Vec3) -> f32,
         bounds: (&'a Vec3, &'a Vec3),
-        particle_volume: f32,
+        particle_cross_section: f32,
     ) -> PhotonRun<'a> {
         PhotonRun {
             scattering_positions: vec![photon.position.clone()],
             photon: photon,
             density: density,
             bounds: bounds,
-            particle_volume: particle_volume,
+            particle_cross_section: particle_cross_section,
         }
     }
 
@@ -42,18 +42,18 @@ impl<'a> PhotonRun<'a> {
         }
     }
 
-    pub fn step(&mut self, dt: f32) {
-        self.photon.step(dt);
-        if self.collided() {
-            self.photon.direction = random_direction(&self.photon.direction) * 299_792_458.0;
+    pub fn step(&mut self, dx: f32) {
+        self.photon.step(dx);
+        if self.collided(dx) {
+            self.photon.direction = random_direction(&self.photon.direction);
             self.scattering_positions.push(self.photon.position.clone());
         }
     }
 
     /// work out whether the photon has collided in this last timestep
-    pub fn collided(&self) -> bool {
+    pub fn collided(&self, dx: f32) -> bool {
         let mut rng = rand::thread_rng();
-        rng.gen_bool((self.particle_volume * (self.density)(self.photon.position.clone())).into())
+        rng.gen_bool((self.particle_cross_section * dx * (self.density)(self.photon.position.clone())).into())
     }
 }
 

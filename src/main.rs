@@ -15,8 +15,10 @@ use crate::photon::Photon;
 use crate::vec3::Vec3;
 use crate::world::{random_direction, PhotonRun};
 
+const SPEED_OF_LIGHT: f32 = 299_792_458.0;
+
 fn main() {
-    let total_photons = 100_000;
+    let total_photons = 100;
     let photon_count = Arc::new(AtomicUsize::new(0));
     let mut thread_handles = vec![];
     let (tx, rx) = mpsc::channel();
@@ -32,14 +34,14 @@ fn main() {
                     let mut r = PhotonRun::new(
                         Photon::new(
                             Vec3::new(0.5, 0.5, 0.0),
-                            Vec3::new(0.0, 0.0, 1.0) * 3.0 * 10f32.powi(8),
+                            Vec3::new(0.0, 0.0, 1.0),
                         ),
                         &|_| 1.0,
                         (&bounds_min, &bounds_max),
                         0.01,
                     );
                     while r.in_box() {
-                        r.step(0.000000000001);
+                        r.step(0.000_000_000_001);
                     }
                     tx_clone.send(r.scattering_positions).unwrap();
                 } else {
