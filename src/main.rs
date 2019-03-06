@@ -1,10 +1,8 @@
 extern crate indicatif;
 extern crate rand;
 
-use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::mpsc;
-use std::sync::Arc;
-use std::thread;
+use std::fs::File;
+use std::io::prelude::*;
 
 pub mod photon;
 pub mod simulation;
@@ -27,12 +25,26 @@ const BOUNDS_MAX: Vec3 = Vec3 {
     z: 1.0,
 };
 
-fn main() {
-    run_simulation(
-        100_000,
+fn main() -> std::io::Result<()> {
+    let run_data = run_simulation(
+        100,
         4,
         Photon::new(Vec3::new(0.5, 0.5, 0.0), Vec3::new(0.0, 0.0, 1.0)),
         &BOUNDS_MIN,
         &BOUNDS_MAX,
     );
+    let mut file = File::create("run_data.txt")?;
+    file.write_all(build_vec_string(run_data).as_bytes())?;
+    Ok(())
+}
+
+fn build_vec_string(data: Vec<Vec<Vec3>>) -> String {
+    let mut string = String::new();
+    for photon in data {
+        for point in photon {
+            string.push_str(&format!("{} {} {} ", point.x, point.y, point.z));
+        }
+        string.push('\n');
+    }
+    string
 }
