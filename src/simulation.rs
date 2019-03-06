@@ -8,7 +8,7 @@ use crate::vec3::Vec3;
 use crate::world::PhotonRun;
 
 pub fn density(v: Vec3) -> f32 {
-    0.0
+    100_000_000_000.0
 }
 
 pub fn run_simulation<'a>(

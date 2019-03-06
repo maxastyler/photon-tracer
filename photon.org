@@ -15,3 +15,9 @@
   When using the series expansion of this, in the limit of v being very small we have $p(0) \approx 1 - pv$
   So the probability of encountering a particle along the path taken by light, Δ is given by:
   $p(\mathrm{scatter}) \approx pv$
+  
+* Optimisations to make:
+- Have a look at the rng function. Maybe I could include the thread_rng varible in
+  the world model, so it's iterated over. Might be faster
+- Maybe have the particle_cross_section*dx calculated only once, then fed to the world simulation
+  rather than calculating every timestep, since it's a constant
