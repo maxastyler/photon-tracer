@@ -27,8 +27,8 @@ const BOUNDS_MAX: Vec3 = Vec3 {
 
 fn main() -> std::io::Result<()> {
     let run_data = run_simulation(
-        100,
-        4,
+        100_000,
+        24,
         Photon::new(Vec3::new(0.5, 0.5, 0.0), Vec3::new(0.0, 0.0, 1.0)),
         &BOUNDS_MIN,
         &BOUNDS_MAX,
